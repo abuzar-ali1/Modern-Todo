@@ -5,7 +5,8 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import NewTask from './NewTask';
+import TodoPage from './TodoPage';
+
 
 export default function LabTabs() {
   const [value, setValue] = React.useState('1');
@@ -27,8 +28,8 @@ export default function LabTabs() {
             <Tab   sx={{color :  "#9CA3AF", textTransform: 'none'}} label="Completed" value="3" />
           </TabList>
         </Box>
-        <TabPanel sx={{ p: '10px 0px '}} value="1">
-          <NewTask/>
+        <TabPanel sx={{  p : 0}} value="1">
+          < TodoPage/>
         </TabPanel>
         <TabPanel value="2">Item Two</TabPanel>
         <TabPanel value="3">Item Three</TabPanel>
