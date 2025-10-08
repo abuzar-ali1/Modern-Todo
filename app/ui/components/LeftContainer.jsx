@@ -6,7 +6,7 @@ import { useState } from 'react';
 import LabTabs from './LabTabs';
 
 
-export default function LeftContainer() {
+export default function LeftContainer({openAddModal , all ,active, completed , openEditModal, deleteTodo ,toggleComplete ,isModalOpen , closeModal  , handleSubmit , value , handleChange , editingTodo}) {
      const [searchQuery, setSearchQuery] = useState('');
 
       const handleSearch = () => {
@@ -17,7 +17,7 @@ export default function LeftContainer() {
    <Box>
     <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>    
     {/* Other components can be added here */}
-    <LabTabs/>
+    <LabTabs openAddModal={openAddModal} all={all} active={active} completed={completed} openEditModal={openEditModal} deleteTodo={deleteTodo} toggleComplete={toggleComplete} isModalOpen={isModalOpen} closeModal={closeModal} editingTodo={editingTodo} handleSubmit={handleSubmit} value={value} handleChange={handleChange}/>
    </Box>
   );
 }

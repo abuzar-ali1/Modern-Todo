@@ -4,10 +4,10 @@ import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { motion, AnimatePresence } from "framer-motion";
-import Form from "./Form";
+import TodoForm from "./TodoForm";
 
 const boxStyle = {
-  width: 400,
+  width: 420,
   bgcolor: "#111827",
   border: "3px solid #374151",
   borderRadius: "12px",
@@ -15,29 +15,12 @@ const boxStyle = {
   p: 4,
 };
 
-// motion box for the animated content
 const MotionBox = motion(Box);
 
 export default function TodoModal({ open, onClose, initialValues, onSubmit }) {
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      closeAfterTransition
-      slots={{ backdrop: Backdrop }}
-      slotProps={{ backdrop: { timeout: 300 } }}
-    >
-      {/* Modal container - centered */}
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          height: "100vh",
-          width: "100vw",
-          outline: "none",
-        }}
-      >
+    <Modal open={open} onClose={onClose} closeAfterTransition slots={{ backdrop: Backdrop }} slotProps={{ backdrop: { timeout: 300 } }}>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh", width: "100vw", outline: "none" }}>
         <AnimatePresence>
           {open && (
             <MotionBox
@@ -47,7 +30,7 @@ export default function TodoModal({ open, onClose, initialValues, onSubmit }) {
               transition={{ duration: 0.18, ease: "easeOut" }}
               sx={boxStyle}
             >
-              <Form initialValues={initialValues} onSubmit={onSubmit} onClose={onClose} />
+              <TodoForm initialValues={initialValues} onSubmit={onSubmit} onClose={onClose} />
             </MotionBox>
           )}
         </AnimatePresence>
