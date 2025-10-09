@@ -14,8 +14,8 @@ import TodoModal from "./TodoModal";
 export default function LabTabs({openAddModal , all ,active, completed , openEditModal, deleteTodo ,toggleComplete ,isModalOpen , closeModal  , handleSubmit , value , handleChange , editingTodo})  {
  
   return (
-    <Box sx={{ py: 4, maxWidth: "1000px" }}>
-      <Box sx={{ mb: 2, display: "flex", gap: 2 }}>
+    <Box sx={{ py: 2, maxWidth: "1000px" }}>    
+      <Box sx={{ mb: 1, display: "flex", gap: 2 }}>
         <Button
           size="large"
           sx={{

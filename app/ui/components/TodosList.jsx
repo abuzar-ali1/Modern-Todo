@@ -22,7 +22,7 @@ export default function TodosList({ items = [], onEdit, onDelete, onToggleComple
     // scrollable area: adjust maxHeight to fit your layout
     <Box
       sx={{
-        maxHeight: "60vh",
+        maxHeight: "70vh",
         overflowY: "auto",
         pr: 1,
         "&::-webkit-scrollbar": { width: 8 },

@@ -1,30 +1,23 @@
-"use client"
-import { Box, Typography } from "@mui/material";
-import Grid from '@mui/material/Grid';
-import { useState } from "react";
-import LeftContainer from "./ui/components/LeftContainer";
-import React, { useEffect, useMemo } from "react";
+"use client";
+import React, { useEffect, useMemo, useState } from "react";
+import Box from "@mui/material/Box";
+import {  Grid, Typography } from "@mui/material";
 import Sidebar from "./ui/components/Sidebar";
-
+import LeftContainer from "./ui/components/LeftContainer";
+import SearchBar from "./ui/components/SearchBar";
 
 const STORAGE_KEY = "todos_v1";
 
+export default function Page() {
 
-export default function Home() {
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const handleSearch = () => {
-    // Implement your search logic here, e.g., filter data
-    console.log('Searching for:', searchQuery);
-  };
-
-  const [value, setValue] = useState("1");
-
-  // app state (single source of truth)
+  const [searchQuery, setSearchQuery] = useState("");
   const [todos, setTodos] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [editingTodo, setEditingTodo] = useState(null);
 
+  const [selectedTab, setSelectedTab] = useState("1");
+
+  // load / persist
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -42,15 +35,41 @@ export default function Home() {
     }
   }, [todos]);
 
+  // derived lists
   const all = todos;
   const active = useMemo(() => todos.filter((t) => !t.completed), [todos]);
   const completed = useMemo(() => todos.filter((t) => t.completed), [todos]);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  // SEarch functionalities
+  const q = (searchQuery || "").trim().toLowerCase();
+  const filteredAll = useMemo(() => {
+    if (!q) return all;
+    return all.filter((t) => (t.title || "").toLowerCase().includes(q) || (t.desc || "").toLowerCase().includes(q));
+  }, [all, q]);
 
-  // Modal control
+  const filteredActive = useMemo(() => {
+    if (!q) return active;
+    return active.filter((t) => (t.title || "").toLowerCase().includes(q) || (t.desc || "").toLowerCase().includes(q));
+  }, [active, q]);
+
+  const filteredCompleted = useMemo(() => {
+    if (!q) return completed;
+    return completed.filter((t) => (t.title || "").toLowerCase().includes(q) || (t.desc || "").toLowerCase().includes(q));
+  }, [completed, q]);
+
+  // map sidebar filters all|active| completed to tab values '1'|'2'|'3'
+  function handleSidebarFilter(filter) {
+    if (filter === "all") setSelectedTab("1");
+    else if (filter === "active") setSelectedTab("2");
+    else if (filter === "completed") setSelectedTab("3");
+  }
+
+  // Tab change handler (from LabTabs)
+  function handleTabChange(event, newValue) {
+    setSelectedTab(newValue);
+  }
+  // functions
+
   function openAddModal() {
     setEditingTodo(null);
     setModalOpen(true);
@@ -64,15 +83,12 @@ export default function Home() {
     setModalOpen(false);
   }
 
-  // CRUD handlers
   function handleSubmit(values) {
     // values: { id?, title, desc }
     if (values.id) {
       setTodos((prev) =>
         prev.map((t) =>
-          t.id === values.id
-            ? { ...t, title: values.title, desc: values.desc || "", updatedAt: new Date().toISOString() }
-            : t
+          t.id === values.id ? { ...t, title: values.title, desc: values.desc || "", updatedAt: new Date().toISOString() } : t
         )
       );
     } else {
@@ -94,12 +110,18 @@ export default function Home() {
   }
 
   function deleteTodo(id) {
-    // confirmation optional
     setTodos((prev) => prev.filter((t) => t.id !== id));
   }
 
+  function openWithPrefill(title = "", desc = "") {
+    setEditingTodo({ id: undefined, title, desc });
+    setModalOpen(true);
+  }
+
+  const stats = { total: all.length, active: active.length, completed: completed.length };
 
   return (
+
     <Box sx={{ margin: "5px" }}>
       <Box
         sx={{
@@ -120,7 +142,26 @@ export default function Home() {
                 <Typography sx={{ fontWeight: 'bold' }} variant='h4'>
                   Todo App
                 </Typography>
-                <LeftContainer openAddModal={openAddModal} all={all} active={active} completed={completed} openEditModal={openEditModal} deleteTodo={deleteTodo} toggleComplete={toggleComplete} isModalOpen={isModalOpen} closeModal={closeModal} editingTodo={editingTodo} handleSubmit={handleSubmit} value={value} handleChange={handleChange}/>
+                <Box sx={{  }}>
+                  <SearchBar value={searchQuery} onChange={setSearchQuery} />
+                </Box>
+
+                <LeftContainer
+                  openAddModal={openAddModal}
+                  all={filteredAll}               // <- pass filtered lists
+                  active={filteredActive}
+                  completed={filteredCompleted}
+                  openEditModal={openEditModal}
+                  deleteTodo={deleteTodo}
+                  toggleComplete={toggleComplete}
+                  isModalOpen={isModalOpen}
+                  closeModal={closeModal}
+                  editingTodo={editingTodo}
+                  handleSubmit={handleSubmit}
+                  value={selectedTab}
+                  handleChange={handleTabChange}
+                />
+
               </Box>
             </Grid>
             <Grid size={{ xs: 12, md: 4 }}>
@@ -128,7 +169,12 @@ export default function Home() {
                 border: "3px solid #374151", minHeight: "100vh",
                 borderRadius: '12px', p: 3
               }} >
-                <Sidebar  all={all} active={active} completed={completed}/>
+                <Sidebar
+                  stats={stats}
+                  onSetFilter={handleSidebarFilter}
+                  onShortcut={(t, d) => openWithPrefill(t, d)}
+                  selectedTab={selectedTab}
+                />
               </Box>
             </Grid>
           </Grid>
@@ -138,4 +184,5 @@ export default function Home() {
     </Box>
   );
 }
+
 

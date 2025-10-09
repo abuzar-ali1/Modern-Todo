@@ -1,12 +1,15 @@
+/* styles/globals.css */
+html, body, #__next {
+  height: 100%;
+}
 
 html, body {
-  height: 100%;
   margin: 0;
   padding: 0;
   font-family: "Inter", "Poppins", "Manrope", sans-serif;
-  background: linear-gradient(to bottom, #111827, #1E1E1E);
-  color: #F9FAFB; 
+  color: #F9FAFB;
+  background: linear-gradient(to bottom, #111827 0%, #1E1E1E 100%);
+  background-attachment: fixed;   
+  background-repeat: no-repeat;
+  background-size: cover;
 }
-
-
-  
