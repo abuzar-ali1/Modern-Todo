@@ -122,13 +122,13 @@ export default function Page() {
 
   return (
 
-    <Box sx={{ margin: "5px" }}>
+    <Box sx={{ margin: "2px" }}>
       <Box
         sx={{
           border: "3px solid #374151",
           borderRadius: "12px",
           minHeight: "100vh",
-          p: '20px'
+          p: '10px'
         }}
       >
         <Box>
@@ -137,7 +137,8 @@ export default function Page() {
               <Box sx={{
                 border: "3px solid #374151",
                 minHeight: "100vh",
-                borderRadius: '12px', p: 3
+                borderRadius: '12px', p: {xs : 1, md : 3 , lg:3} ,
+                
               }} >
                 <Typography sx={{ fontWeight: 'bold' }} variant='h4'>
                   Todo App
